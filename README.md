@@ -200,3 +200,29 @@ Para o **armazenamento dos vértices** em OpenGL, utilizamos principalmente trê
 Quando o OpenGL desenha formas, ele usa os índices do EBO para acessar os vértices correspondentes do VBO.
 
 </details>
+
+Esses três objetos trabalham juntos para organizar e otimizar a maneira como os dados de vértices e os índices são enviados para a GPU, garantindo um pipeline de renderização mais eficiente.
+
+Quando você usa VAOs, VBOs e EBOs juntos, o fluxo de trabalho típico é o seguinte:
+
+1. **Criação do VAO**:
+   - Um **VAO** é criado para armazenar a configuração de atributos de vértices.
+
+2. **Vinculação e Configuração do VBO**:
+   - Você cria um **VBO** e o vincula ao VAO. O **VBO** contém os **dados brutos dos vértices** (posições, cores, normais, etc.).
+   - A seguir, você configura os **atributos de vértices** (usando `glVertexAttribPointer`) para indicar ao OpenGL como os dados no VBO estão organizados (por exemplo, quais dados correspondem a posição, cor, etc.).
+
+3. **Vinculação e Configuração do EBO**:
+   - Você cria um **EBO** e o vincula ao VAO. O **EBO** contém os **índices** que referenciam os vértices no VBO, definindo como eles serão desenhados.
+   - O **EBO** permite que você desenhe objetos complexos reutilizando vértices, desenhando com índices através da função `glDrawElements`.
+
+4. **Renderização**:
+   - Ao renderizar, basta **vincular o VAO**. Ele automaticamente ativa o VBO e o EBO vinculados e usa as configurações armazenadas.
+   - Você pode usar `glDrawArrays` (se não usar um EBO) ou `glDrawElements` (se usar um EBO) para desenhar os objetos.
+
+![Imagem ilustrativa da relação entre VAO (Vertex Array Object), VBO (Vertex Buffer Object) e EBO (Element Buffer Object).](https://learnopengl.com/img/getting-started/vertex_array_objects_ebo.png)
+
++ **VAO**: Armazena as configurações de como os vértices e índices estão organizados (como e quais VBOs e EBOs usar).
++ **VBO**: Armazena os dados de vértices (posições, cores, normais, etc.).
++ **EBO**: Armazena os índices que referenciam os vértices no VBO, otimizando a renderização ao permitir a reutilização de vértices.
+O VAO encapsula a configuração de como os VBOs e EBOs são usados, tornando a renderização eficiente e simplificando o código.
